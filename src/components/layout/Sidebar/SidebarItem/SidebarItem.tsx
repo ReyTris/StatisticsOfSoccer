@@ -4,7 +4,7 @@ import { IconType } from "react-icons";
 import styles from "./Sidebar.module.scss";
 
 interface SidebarItemsProps {
-	id?: number | undefined,
+	id?: number;
 	icon: IconType;
 	label: string;
 	handleNavigate?: (id: number) => void;
@@ -16,9 +16,8 @@ export const SidebarItem: React.FC<SidebarItemsProps> = ({
 	label,
 	icon: Icon,
 	handleNavigate,
-	className
+	className,
 }) => {
-
 	return (
 		<div
 			className={cn(
@@ -29,10 +28,8 @@ export const SidebarItem: React.FC<SidebarItemsProps> = ({
 			onClick={() => handleNavigate!(id!)}
 		>
 			<Icon />
-			<p className='ml-3'>
-				{label}
-			</p>
-			<div className='px-2'></div>
+			<p className="ml-3">{label}</p>
+			<div className="px-2"></div>
 		</div>
 	);
 };
