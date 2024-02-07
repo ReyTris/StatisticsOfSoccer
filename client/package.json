@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.6.7",
     "classnames": "^2.5.1",
     "localforage": "^1.10.0",
     "lucide-react": "^0.312.0",
@@ -21,6 +22,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.11.16",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
