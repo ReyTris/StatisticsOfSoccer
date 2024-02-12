@@ -1,3 +1,4 @@
+import { json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Express } from 'express';
@@ -25,6 +26,12 @@ export class App {
 		this.exceptionFilter = exceptionFilter;
 	}
 
+	useMiddleware() {
+		this.app.use(json())
+		this.app.use(cookieParser());
+		this.app.use(cors());
+	}
+
 	userRoutes() {
 		this.app.use('/api', this.UserController.router);
 	}
@@ -34,8 +41,7 @@ export class App {
 	}
 
 	public async init() {
-		this.app.use(cookieParser());
-		this.app.use(cors());
+		this.useMiddleware()
 		this.userRoutes();
 		this.useExceptionFilter();
 		this.server = this.app.listen(this.port);

@@ -6,6 +6,9 @@ import { TYPES } from '../types';
 
 import 'reflect-metadata';
 import { HTTPError } from '../errors/http-error';
+import { UserRegisterDto } from './dto/register-login.dto';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserService } from './user.service';
 import { IUserController } from './users.controller.interface';
 
 @injectable()
@@ -23,11 +26,15 @@ export class UserController extends BaseController implements IUserController {
 		]);
 	}
 
-	register(req: Request, res: Response, next: NextFunction) {
-		this.ok(res, 'register');
+	async register({body}: Request<{},{}, UserRegisterDto>, res: Response, next: NextFunction) {
+		const result = await new UserService().registration(body)
+
+		
+		this.ok(res, {email: result.email, id: result.id});
 	}
 
-	login(req: Request, res: Response, next: NextFunction) {
+	login(req: Request<{},{}, UserLoginDto>, res: Response, next: NextFunction) {
+		console.log(req.body)
 		// this.ok(res, 123);
 		next(new HTTPError('Ошибка авторизации', 400, 'login'));
 	}
