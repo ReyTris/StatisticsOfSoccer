@@ -14,7 +14,11 @@ export abstract class BaseController {
 		return this._router;
 	}
 
-	public send<T>(res: Response, code: number, message: T): Response<any, Record<string, any>> {
+	public send<T>(
+		res: Response,
+		code: number,
+		message: T
+	): Response<any, Record<string, any>> {
 		res.type('application/json');
 		return res.status(code).json(message);
 	}
@@ -26,8 +30,12 @@ export abstract class BaseController {
 	protected bindRoutes(routes: IRouteController[]) {
 		for (const route of routes) {
 			this.logger.log(`[${route.method}]: ${route.path}`);
+			const middlewares = route.middlewares?.map((middle) =>
+				middle.execute.bind(middle)
+			);
 			const handler = route.func.bind(this);
-			this.router[route.method](route.path, handler);
+			const pipeline = middlewares ? [...middlewares, handler] : handler;
+			this.router[route.method](route.path, pipeline);
 		}
 	}
 }

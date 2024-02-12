@@ -1,31 +1,22 @@
+import { injectable } from 'inversify';
 import { UserRegisterDto } from './dto/register-login.dto';
 import { UserLoginDto } from './dto/user-login.dto';
+import { User } from './user.entity';
 import { IUserService } from './user.service.interface';
 
+@injectable()
 export class UserService implements IUserService {
-    async registration({name, password, email}: UserRegisterDto) {
-        // const candidate = await prisma.user.findFirst({
-        //     where: {
-        //         email
-        //     }
-        // })
+	async registration({
+		name,
+		password,
+		email,
+	}: UserRegisterDto): Promise<User | null> {
+		const newUser = new User(email, name);
+		await newUser.setPassword(password);
+		return null;
+	}
 
-        // if (candidate) {
-        //     throw new HTTPError('Пользователь есть', 401)
-        // }
-
-        // const newUser = await prisma.user.create({
-        //     data: {
-        //         email, 
-        //         name,
-        //         password
-        //     }
-        // })
-
-        // return newUser
-    }
-
-    async login(dto: UserLoginDto) {
-
-    }
+	async login(dto: UserLoginDto): Promise<boolean> {
+		return true;
+	}
 }
