@@ -27,7 +27,12 @@ export class UserController extends BaseController implements IUserController {
 				func: this.register,
 				middlewares: [new ValidateMiddleware(UserRegisterDto)],
 			},
-			{ path: '/login', method: 'post', func: this.login },
+			{
+				path: '/login',
+				method: 'post',
+				func: this.login,
+				middlewares: [new ValidateMiddleware(UserLoginDto)],
+			},
 			{ path: '/logout', method: 'post', func: this.logout },
 			{ path: '/activate/:link', method: 'post', func: this.activeEmail },
 			{ path: '/refresh', method: 'post', func: this.refresh },
@@ -47,10 +52,16 @@ export class UserController extends BaseController implements IUserController {
 		this.ok(res, { email: result.email, id: result.id });
 	}
 
-	login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction) {
-		console.log(req.body);
-		this.ok(res, 123);
-		// next(new HTTPError('Ошибка авторизации', 400, 'login'));
+	async login(
+		{ body }: Request<{}, {}, UserLoginDto>,
+		res: Response,
+		next: NextFunction
+	): Promise<void> {
+		const result = await this.userService.login(body);
+		if (!result) {
+			return next(new HTTPError('Неверное мыло или пароль', 423));
+		}
+		this.ok(res, { email: body.email });
 	}
 
 	logout(req: Request, res: Response, next: NextFunction) {
