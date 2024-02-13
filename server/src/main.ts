@@ -1,4 +1,5 @@
 import { Container, ContainerModule, interfaces } from 'inversify';
+import { PrismaService } from './DB/db.config';
 import { App } from './app';
 import { ExceptionFilter } from './errors/exception.filter';
 import { IExceptionFilter } from './errors/exception.filter.interface';
@@ -9,12 +10,16 @@ import { UserService } from './users/user.service';
 import { IUserService } from './users/user.service.interface';
 import { UserController } from './users/users.controller';
 import { IUserController } from './users/users.controller.interface';
+import { UsersRepository } from './users/users.repository';
+import { IUsersRepository } from './users/users.repository.interface';
 
 export const appBinding = new ContainerModule((bind: interfaces.Bind) => {
-	bind<ILogger>(TYPES.ILogger).to(LoggerService);
+	bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
 	bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
 	bind<IUserController>(TYPES.UserController).to(UserController);
 	bind<IUserService>(TYPES.UserService).to(UserService);
+	bind<PrismaService>(TYPES.PrismaService).to(PrismaService);
+	bind<IUsersRepository>(TYPES.IUsersRepository).to(UsersRepository);
 	bind<App>(TYPES.Application).to(App);
 });
 

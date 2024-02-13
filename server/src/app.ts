@@ -5,6 +5,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
+import { PrismaService } from './DB/db.config';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
 import { TYPES } from './types';
@@ -19,7 +20,8 @@ export class App {
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
 		@inject(TYPES.UserController) private UserController: UserController,
-		@inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter
+		@inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
+		@inject(TYPES.PrismaService) private prismaService: PrismaService
 	) {
 		this.app = express();
 		this.port = process.env.PORT || 3000;
@@ -27,7 +29,7 @@ export class App {
 	}
 
 	useMiddleware() {
-		this.app.use(json())
+		this.app.use(json());
 		this.app.use(cookieParser());
 		this.app.use(cors());
 	}
@@ -41,9 +43,10 @@ export class App {
 	}
 
 	public async init() {
-		this.useMiddleware()
+		this.useMiddleware();
 		this.userRoutes();
 		this.useExceptionFilter();
+		await this.prismaService.connect();
 		this.server = this.app.listen(this.port);
 		this.logger.log(`server is running on PORT: ${this.port}`);
 	}
