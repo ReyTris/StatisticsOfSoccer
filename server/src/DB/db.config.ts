@@ -20,8 +20,4 @@ export class PrismaService {
 	async disconnect(): Promise<void> {
 		await this.prisma.$disconnect();
 	}
-
-	// async client() {
-	// 	await this.client();
-	// }
 }

@@ -49,7 +49,11 @@ export class UserController extends BaseController implements IUserController {
 		if (!result) {
 			return next(new HTTPError('Такой пользователь уже существует', 422));
 		}
-		this.ok(res, { email: result.email, id: result.id });
+		res.cookie('refreshToken', result.refreshToken, {
+			maxAge: 30 * 24 * 60 * 60 * 1000,
+			httpOnly: true,
+		});
+		this.ok(res, result);
 	}
 
 	async login(
@@ -58,9 +62,19 @@ export class UserController extends BaseController implements IUserController {
 		next: NextFunction
 	): Promise<void> {
 		const result = await this.userService.login(body);
+		console.log(result);
+
 		if (!result) {
 			return next(new HTTPError('Неверное мыло или пароль', 423));
 		}
+
+		if (typeof result !== 'boolean') {
+			res.cookie('refreshToken', result.refreshToken, {
+				maxAge: 30 * 24 * 60 * 60 * 1000,
+				httpOnly: true,
+			});
+		}
+
 		this.ok(res, { email: body.email });
 	}
 
