@@ -5,8 +5,8 @@ import { ILogger } from '../logger/logger.interface';
 import { TYPES } from '../types';
 
 import 'reflect-metadata';
+import { TestMIddleware } from '../common/middleware.test';
 import { ValidateMiddleware } from '../common/validate.middleware';
-import { HTTPError } from '../errors/http-error';
 import { UserRegisterDto } from './dto/register-login.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { IUserService } from './user.service.interface';
@@ -31,7 +31,10 @@ export class UserController extends BaseController implements IUserController {
 				path: '/login',
 				method: 'post',
 				func: this.login,
-				middlewares: [new ValidateMiddleware(UserLoginDto)],
+				middlewares: [
+					new ValidateMiddleware(UserLoginDto),
+					new TestMIddleware(),
+				],
 			},
 			{ path: '/logout', method: 'post', func: this.logout },
 			{ path: '/activate/:link', method: 'post', func: this.activeEmail },
@@ -45,15 +48,16 @@ export class UserController extends BaseController implements IUserController {
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
-		const result = await this.userService.registration(body);
-		if (!result) {
-			return next(new HTTPError('Такой пользователь уже существует', 422));
+		try {
+			const result = await this.userService.registration(body);
+			res.cookie('refreshToken', result.refreshToken, {
+				maxAge: 30 * 24 * 60 * 60 * 1000,
+				httpOnly: true,
+			});
+			this.ok(res, result);
+		} catch (e) {
+			next(e);
 		}
-		res.cookie('refreshToken', result.refreshToken, {
-			maxAge: 30 * 24 * 60 * 60 * 1000,
-			httpOnly: true,
-		});
-		this.ok(res, result);
 	}
 
 	async login(
@@ -61,21 +65,16 @@ export class UserController extends BaseController implements IUserController {
 		res: Response,
 		next: NextFunction
 	): Promise<void> {
-		const result = await this.userService.login(body);
-		console.log(result);
-
-		if (!result) {
-			return next(new HTTPError('Неверное мыло или пароль', 423));
-		}
-
-		if (typeof result !== 'boolean') {
+		try {
+			const result = await this.userService.login(body);
 			res.cookie('refreshToken', result.refreshToken, {
 				maxAge: 30 * 24 * 60 * 60 * 1000,
 				httpOnly: true,
 			});
+			this.ok(res, { email: body.email });
+		} catch (e) {
+			next(e);
 		}
-
-		this.ok(res, { email: body.email });
 	}
 
 	logout(req: Request, res: Response, next: NextFunction) {

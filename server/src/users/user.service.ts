@@ -1,10 +1,11 @@
 import { inject, injectable } from 'inversify';
 import jwt from 'jsonwebtoken';
+import { HTTPError } from '../errors/http-error';
 import { TYPES } from '../types';
 import { UserRegisterDto } from './dto/register-login.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { User } from './user.entity';
-import { IUserService, UserAuth } from './user.service.interface';
+import { IUserAuth, IUserService } from './user.service.interface';
 import { IUsersRepository } from './users.repository.interface';
 
 @injectable()
@@ -17,13 +18,13 @@ export class UserService implements IUserService {
 		name,
 		password,
 		email,
-	}: UserRegisterDto): Promise<UserAuth | null> {
+	}: UserRegisterDto): Promise<IUserAuth> {
 		const newUser = new User(email, name);
 		await newUser.setPassword(password);
 
 		const existedUser = await this.usersRepository.findUser(email);
 		if (existedUser) {
-			return null;
+			throw new HTTPError('Такой пользователь уже существует', 422);
 		}
 		const registeredUser = await this.usersRepository.registration(newUser);
 		const tokens = this.generateToken(email);
@@ -35,11 +36,11 @@ export class UserService implements IUserService {
 		return { ...tokens, user: registeredUser };
 	}
 
-	async login({ email, password }: UserLoginDto): Promise<UserAuth | boolean> {
+	async login({ email, password }: UserLoginDto): Promise<IUserAuth> {
 		const existedUser = await this.usersRepository.findUser(email);
 
 		if (!existedUser) {
-			return false;
+			throw new HTTPError('Неверное мыло или пароль', 423);
 		}
 
 		const newUser = new User(
@@ -49,7 +50,7 @@ export class UserService implements IUserService {
 		);
 
 		if (!(await newUser.comparePassword(password))) {
-			return false;
+			throw new HTTPError('Неверное мыло или пароль', 423);
 		}
 
 		const tokens = this.generateToken(email);
@@ -58,7 +59,7 @@ export class UserService implements IUserService {
 		return { ...tokens, user: existedUser };
 	}
 
-	generateToken(payload: any): any {
+	generateToken(payload: string): any {
 		const accessToken = jwt.sign({ payload }, 'APPPROOFWORK', {
 			expiresIn: '30m',
 		});
