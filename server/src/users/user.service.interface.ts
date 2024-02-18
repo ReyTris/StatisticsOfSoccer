@@ -5,7 +5,6 @@ import { UserLoginDto } from './dto/user-login.dto';
 export interface IUserService {
 	registration: (dto: UserRegisterDto) => Promise<IUserAuth>;
 	login: (dto: UserLoginDto) => Promise<IUserAuth>;
-	generateToken: (payload: string) => void;
 }
 
 export interface IUserAuth {

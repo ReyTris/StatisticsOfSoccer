@@ -1,4 +1,4 @@
-import { TokenModel, UserModel } from '@prisma/client';
+import { UserModel } from '@prisma/client';
 import { inject, injectable } from 'inversify';
 import { PrismaService } from '../DB/db.config';
 import { TYPES } from '../types';
@@ -27,22 +27,5 @@ export class UsersRepository implements IUsersRepository {
 				email,
 			},
 		});
-	}
-
-	async saveToken(userId: number, refreshToken: string): Promise<TokenModel> {
-		const tokenData = await this.prismaService.prisma.tokenModel.upsert({
-			where: {
-				id: userId,
-			},
-			update: {
-				refreshToken,
-			},
-			create: {
-				id: userId,
-				refreshToken,
-			},
-		});
-
-		return tokenData;
 	}
 }

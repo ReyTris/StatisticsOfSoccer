@@ -5,7 +5,6 @@ import { ILogger } from '../logger/logger.interface';
 import { TYPES } from '../types';
 
 import 'reflect-metadata';
-import { TestMIddleware } from '../common/middleware.test';
 import { ValidateMiddleware } from '../common/validate.middleware';
 import { UserRegisterDto } from './dto/register-login.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -31,10 +30,7 @@ export class UserController extends BaseController implements IUserController {
 				path: '/login',
 				method: 'post',
 				func: this.login,
-				middlewares: [
-					new ValidateMiddleware(UserLoginDto),
-					new TestMIddleware(),
-				],
+				middlewares: [new ValidateMiddleware(UserLoginDto)],
 			},
 			{ path: '/logout', method: 'post', func: this.logout },
 			{ path: '/activate/:link', method: 'post', func: this.activeEmail },

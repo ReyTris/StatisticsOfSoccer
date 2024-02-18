@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
-import jwt from 'jsonwebtoken';
 import { HTTPError } from '../errors/http-error';
+import { ITokenRepository } from '../token/token.repository.interface';
+import { ITokenService } from '../token/token.service.interface';
 import { TYPES } from '../types';
 import { UserRegisterDto } from './dto/register-login.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -11,7 +12,9 @@ import { IUsersRepository } from './users.repository.interface';
 @injectable()
 export class UserService implements IUserService {
 	constructor(
-		@inject(TYPES.IUsersRepository) private usersRepository: IUsersRepository
+		@inject(TYPES.IUsersRepository) private usersRepository: IUsersRepository,
+		@inject(TYPES.ITokenService) private tokenService: ITokenService,
+		@inject(TYPES.ITokenRepository) private tokenRepository: ITokenRepository
 	) {}
 
 	async registration({
@@ -27,8 +30,8 @@ export class UserService implements IUserService {
 			throw new HTTPError('Такой пользователь уже существует', 422);
 		}
 		const registeredUser = await this.usersRepository.registration(newUser);
-		const tokens = this.generateToken(email);
-		await this.usersRepository.saveToken(
+		const tokens = this.tokenService.generateToken(email);
+		await this.tokenRepository.saveToken(
 			registeredUser.id,
 			tokens.refreshToken
 		);
@@ -53,23 +56,9 @@ export class UserService implements IUserService {
 			throw new HTTPError('Неверное мыло или пароль', 423);
 		}
 
-		const tokens = this.generateToken(email);
-		await this.usersRepository.saveToken(existedUser.id, tokens.refreshToken);
+		const tokens = this.tokenService.generateToken(email);
+		await this.tokenRepository.saveToken(existedUser.id, tokens.refreshToken);
 
 		return { ...tokens, user: existedUser };
-	}
-
-	generateToken(payload: string): any {
-		const accessToken = jwt.sign({ payload }, 'APPPROOFWORK', {
-			expiresIn: '30m',
-		});
-		const refreshToken = jwt.sign({ payload }, 'APPPROOFWORK', {
-			expiresIn: '30d',
-		});
-
-		return {
-			accessToken,
-			refreshToken,
-		};
 	}
 }
