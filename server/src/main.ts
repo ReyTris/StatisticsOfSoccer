@@ -5,6 +5,8 @@ import { ExceptionFilter } from './errors/exception.filter';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
 import { LoggerService } from './logger/logger.service';
+import { AuthMiddleware } from './middlewars/auth.middleware';
+import { IMiddleware } from './middlewars/middleware.interface';
 import { TokenRepository } from './token/token.repository';
 import { ITokenRepository } from './token/token.repository.interface';
 import { TokenService } from './token/token.service';
@@ -26,6 +28,7 @@ export const appBinding = new ContainerModule((bind: interfaces.Bind) => {
 	bind<IUsersRepository>(TYPES.IUsersRepository).to(UsersRepository);
 	bind<ITokenService>(TYPES.ITokenService).to(TokenService);
 	bind<ITokenRepository>(TYPES.ITokenRepository).to(TokenRepository);
+	bind<IMiddleware>(TYPES.IMiddleware).to(AuthMiddleware);
 	bind<App>(TYPES.Application).to(App);
 });
 
