@@ -5,6 +5,10 @@ import { ExceptionFilter } from './errors/exception.filter';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
 import { LoggerService } from './logger/logger.service';
+import { TokenRepository } from './token/token.repository';
+import { ITokenRepository } from './token/token.repository.interface';
+import { TokenService } from './token/token.service';
+import { ITokenService } from './token/token.service.interface';
 import { TYPES } from './types';
 import { UserService } from './users/user.service';
 import { IUserService } from './users/user.service.interface';
@@ -20,6 +24,8 @@ export const appBinding = new ContainerModule((bind: interfaces.Bind) => {
 	bind<IUserService>(TYPES.UserService).to(UserService);
 	bind<PrismaService>(TYPES.PrismaService).to(PrismaService);
 	bind<IUsersRepository>(TYPES.IUsersRepository).to(UsersRepository);
+	bind<ITokenService>(TYPES.ITokenService).to(TokenService);
+	bind<ITokenRepository>(TYPES.ITokenRepository).to(TokenRepository);
 	bind<App>(TYPES.Application).to(App);
 });
 
