@@ -1,3 +1,4 @@
+import { UserModel } from '@prisma/client';
 import { inject, injectable } from 'inversify';
 import { HTTPError } from '../errors/http-error';
 import { ITokenRepository } from '../token/token.repository.interface';
@@ -60,5 +61,28 @@ export class UserService implements IUserService {
 		await this.tokenRepository.saveToken(existedUser.id, tokens.refreshToken);
 
 		return { ...tokens, user: existedUser };
+	}
+
+	async refresh(refreshToken: string): Promise<IUserAuth> {
+		if (!refreshToken) {
+			throw new HTTPError('Не авторизированный пользователь', 403);
+		}
+		const userData = this.tokenService.validateRefreshToken(refreshToken);
+		const tokenFromDb = this.tokenRepository.findToken(refreshToken);
+
+		if (!userData || !tokenFromDb) {
+			throw new HTTPError('Не авторизированный пользователь', 403);
+		}
+
+		const existedUser = await this.usersRepository.findUserById(userData.id);
+
+		const tokens = this.tokenService.generateToken(existedUser?.email!);
+		await this.tokenRepository.saveToken(existedUser?.id!, tokens.refreshToken);
+
+		return { ...tokens, user: existedUser };
+	}
+
+	async getAllUsers(): Promise<UserModel[]> {
+		return await this.usersRepository.getAllUsers();
 	}
 }
