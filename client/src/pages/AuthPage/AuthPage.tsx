@@ -1,12 +1,11 @@
 import { useCallback, useState } from 'react';
+import { AuthService } from '../../services/auth/auth.service';
 import Input from './Input';
 
 const AuthPage = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-
-	console.log(name, email, password);
 
 	const [variant, setVariant] = useState('login');
 
@@ -15,6 +14,20 @@ const AuthPage = () => {
 			currentVariant === 'login' ? 'register' : 'login'
 		);
 	}, []);
+
+	const register = async (
+		email: string,
+		password: string,
+		name?: string
+	): Promise<void> => {
+		try {
+			const result = await AuthService.register(email, password, name);
+			localStorage.setItem('token', result.data.accessToken);
+			console.log(result);
+		} catch (error) {
+			console.log();
+		}
+	};
 
 	return (
 		<div className="relative h-screen w-full bg-[url('/src//assets//img//bg.jpg')] bg-center bg-no-repeat bg-cover bg-fixed">
@@ -60,6 +73,10 @@ const AuthPage = () => {
 								{variant === 'login' ? 'Зарегайся' : 'Вваливайся'}
 							</span>
 						</p>
+
+						<button onClick={() => register(email, password, name)}>
+							Зарегаться
+						</button>
 					</div>
 				</div>
 			</div>

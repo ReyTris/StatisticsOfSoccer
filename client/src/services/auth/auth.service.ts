@@ -1,20 +1,29 @@
-import { axiosDefault } from '../../api/axios';
+import { AxiosResponse } from 'axios';
+import { $api } from '../../api/axios';
+import { IAuthResponse } from '../../models/response/IAuthResponse';
 
 export const AuthService = {
-    async login(email: string, password: string) {
-		const response = await axiosDefault.post('/login', {
+	async login(
+		email: string,
+		password: string
+	): Promise<AxiosResponse<IAuthResponse>> {
+		return $api.post('/login', {
 			email,
 			password,
 		});
-
-		return response.data;
 	},
-	async register(email: string, password: string) {
-		const response = await axiosDefault.post('/register', {
+	async register(
+		email: string,
+		password: string,
+		name?: string
+	): Promise<AxiosResponse<IAuthResponse>> {
+		return $api.post('/register', {
+			name,
 			email,
 			password,
 		});
-
-		return response.data;
+	},
+	async logout(): Promise<void> {
+		$api.post('/logout');
 	},
 };
