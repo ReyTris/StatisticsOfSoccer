@@ -1,6 +1,9 @@
 import { default as cn } from 'classnames';
 import { useState } from 'react';
 import { IoMdSettings } from 'react-icons/io';
+import { useAppDispatch } from '../../../hooks/useDispatch';
+import { logoutUser } from '../../../store/slices/userSlice';
+import {} from '../../../store/store';
 import Box from './Box';
 import SidebarItem from './SidebarItem';
 import { SidebarNavigation } from './SidebarNavigation/SidebarNavigation';
@@ -12,6 +15,8 @@ export const Sidebar = () => {
 	const handleNavigate = (state: number | boolean) => {
 		setActiveItem(state);
 	};
+
+	const dispatch = useAppDispatch();
 
 	return (
 		<div className="w-full h-full relative z-10">
@@ -29,6 +34,11 @@ export const Sidebar = () => {
 				</Box>
 				<Box className="mt-auto">
 					<SidebarItem label="Настройки" icon={IoMdSettings} />
+					<SidebarItem
+						label="Выйти"
+						handleNavigate={() => dispatch(logoutUser())}
+						icon={IoMdSettings}
+					/>
 				</Box>
 			</div>
 			{activeItem && (

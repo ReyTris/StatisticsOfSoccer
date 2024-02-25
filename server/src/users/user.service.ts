@@ -44,7 +44,7 @@ export class UserService implements IUserService {
 		const existedUser = await this.usersRepository.findUser(email);
 
 		if (!existedUser) {
-			throw new HTTPError('Неверное мыло или пароль', 423);
+			throw new HTTPError('Неверное мыло или пароль', 401);
 		}
 
 		const newUser = new User(
@@ -54,30 +54,30 @@ export class UserService implements IUserService {
 		);
 
 		if (!(await newUser.comparePassword(password))) {
-			throw new HTTPError('Неверное мыло или пароль', 423);
+			throw new HTTPError('Неверное мыло или пароль', 401);
 		}
 
 		const tokens = this.tokenService.generateToken(email);
 		await this.tokenRepository.saveToken(existedUser.id, tokens.refreshToken);
-
+		console.log(tokens);
 		return { ...tokens, user: existedUser };
 	}
 
 	async refresh(refreshToken: string): Promise<IUserAuth> {
 		if (!refreshToken) {
-			throw new HTTPError('Не авторизированный пользователь', 403);
+			throw new HTTPError('Не авторизированный пользователь', 401);
 		}
 		const userData = this.tokenService.validateRefreshToken(refreshToken);
 		const tokenFromDb = this.tokenRepository.findToken(refreshToken);
 
 		if (!userData || !tokenFromDb) {
-			throw new HTTPError('Не авторизированный пользователь', 403);
+			throw new HTTPError('Не авторизированный пользователь', 401);
 		}
 
 		const existedUser = await this.usersRepository.findUserById(userData.id);
 
-		const tokens = this.tokenService.generateToken(existedUser?.email!);
-		await this.tokenRepository.saveToken(existedUser?.id!, tokens.refreshToken);
+		const tokens = this.tokenService.generateToken(existedUser!.email);
+		await this.tokenRepository.saveToken(existedUser!.id, tokens.refreshToken);
 
 		return { ...tokens, user: existedUser };
 	}

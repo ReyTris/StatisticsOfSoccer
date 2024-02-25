@@ -14,24 +14,24 @@ export class AuthMiddleware implements IMiddleware {
 		try {
 			const authorizationHeader = req.headers.authorization;
 			if (!authorizationHeader) {
-				return next(new HTTPError('Пользователь не авторизован', 403));
+				return next(new HTTPError('Пользователь не авторизован', 401));
 			}
 
 			const accessToken = authorizationHeader?.split(' ')[1];
 			if (!accessToken) {
-				return next(new HTTPError('Пользователь не авторизован', 403));
+				return next(new HTTPError('Пользователь не авторизован', 401));
 			}
 
 			const userData = this.tokenService.validateAccessToken(accessToken);
 
 			if (!userData) {
-				return next(new HTTPError('Пользователь не авторизован', 403));
+				return next(new HTTPError('Пользователь не авторизован', 401));
 			}
 
 			req.body = userData;
 			next();
 		} catch (error) {
-			return next(new HTTPError('Пользователь не авторизован', 403));
+			return next(new HTTPError('Пользователь не авторизован', 401));
 		}
 	}
 }
