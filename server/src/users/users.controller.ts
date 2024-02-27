@@ -72,7 +72,6 @@ export class UserController extends BaseController implements IUserController {
 	): Promise<void> {
 		try {
 			const result = await this.userService.login(body);
-			// console.log(result);
 			res.cookie('refreshToken', result.refreshToken, {
 				maxAge: 30 * 24 * 60 * 60 * 1000,
 				httpOnly: true,
@@ -89,7 +88,6 @@ export class UserController extends BaseController implements IUserController {
 			const token = await this.tokenService.removeToken(refreshToken);
 			res.clearCookie(refreshToken);
 			this.ok(res, `${token.id}: Вышел из системы`);
-			// console.log(req.cookies);
 		} catch (error) {
 			next(error);
 		}
@@ -107,7 +105,6 @@ export class UserController extends BaseController implements IUserController {
 		try {
 			const { refreshToken } = req.cookies;
 			const result = await this.userService.refresh(refreshToken);
-			console.log(result);
 			res.cookie('refreshToken', result.refreshToken, {
 				maxAge: 30 * 24 * 60 * 60 * 1000,
 				httpOnly: true,

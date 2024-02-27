@@ -16,8 +16,11 @@ export class AuthMiddleware implements IMiddleware {
 			if (!authorizationHeader) {
 				return next(new HTTPError('Пользователь не авторизован', 401));
 			}
+			// console.log(authorizationHeader);
+			
 
 			const accessToken = authorizationHeader?.split(' ')[1];
+
 			if (!accessToken) {
 				return next(new HTTPError('Пользователь не авторизован', 401));
 			}

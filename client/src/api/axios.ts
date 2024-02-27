@@ -31,6 +31,7 @@ $api.interceptors.response.use(
 				const response = await axios.get(`${API_URL}/refresh`, {
 					withCredentials: true,
 				});
+				
 
 				localStorage.setItem('token', response.data.accessToken);
 				return $api.request(originalRequest);

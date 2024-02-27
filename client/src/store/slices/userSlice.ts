@@ -21,6 +21,7 @@ export const loginUser = createAsyncThunk(
 	async ({ email, password }: IEmailPassword, { rejectWithValue }) => {
 		try {
 			const response = await AuthService.login(email, password);
+			
 			localStorage.setItem('token', response.data.accessToken);
 			return response;
 		} catch (error) {
@@ -83,7 +84,12 @@ export const userSlice = createSlice({
 			state.isAuth = false;
 		});
 		builder.addCase(checkAuth.fulfilled, (state) => {
-			state.isAuth = true;
+			try {
+				state.isAuth = true;
+			} catch (error) {
+				console.log(error);
+				
+			}
 		});
 	},
 });

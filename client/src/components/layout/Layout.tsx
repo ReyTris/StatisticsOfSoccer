@@ -2,17 +2,15 @@ import { FC, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/useDispatch';
 import { checkAuth } from '../../store/slices/userSlice';
-import { store } from '../../store/store';
 import Sidebar from './Sidebar';
 
 export const Layout: FC = () => {
 	const dispatch = useAppDispatch();
 
-	const state = store.getState();
+	// const state = store.getState();
 	const navigate = useNavigate();
 	const isAuth = useAppSelector((state) => state.userReducer.isAuth);
 
-	console.log(state);
 
 	useEffect(() => {
 		if (localStorage.getItem('token')) {
@@ -22,7 +20,7 @@ export const Layout: FC = () => {
 		if (!isAuth) {
 			navigate('/auth/login');
 		}
-	}, [navigate, isAuth]);
+	}, [navigate, isAuth, dispatch]);
 
 	return (
 		<div className="h-screen bg-gray-300">
