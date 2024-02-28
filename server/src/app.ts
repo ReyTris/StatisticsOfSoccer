@@ -12,8 +12,6 @@ import { ILogger } from './logger/logger.interface';
 import { TYPES } from './types';
 import { UserController } from './users/users.controller';
 
-
-
 @injectable()
 export class App {
 	app: Express;
@@ -34,7 +32,12 @@ export class App {
 	useMiddleware() {
 		this.app.use(json());
 		this.app.use(cookieParser());
-		this.app.use(cors());
+		this.app.use(
+			cors({
+				credentials: true,
+				origin: process.env.CLIENT_URL,
+			})
+		);
 	}
 
 	userRoutes() {

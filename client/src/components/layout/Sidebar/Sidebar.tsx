@@ -1,7 +1,9 @@
 import { default as cn } from 'classnames';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IoMdSettings } from 'react-icons/io';
-import { AuthService } from '../../../services/auth/auth.service';
+import { useAppDispatch } from '../../../hooks/useDispatch';
+import { logoutUser } from '../../../store/slices/userSlice';
+import {} from '../../../store/store';
 import Box from './Box';
 import SidebarItem from './SidebarItem';
 import { SidebarNavigation } from './SidebarNavigation/SidebarNavigation';
@@ -13,14 +15,9 @@ export const Sidebar = () => {
 	const handleNavigate = (state: number | boolean) => {
 		setActiveItem(state);
 	};
-	useEffect(() => {
-		const response = async () => {
-			const data = await AuthService.register('nikita', '123456');
 
-			console.log(data);
-		};
-		response();
-	}, []);
+	const dispatch = useAppDispatch();
+
 	return (
 		<div className="w-full h-full relative z-10">
 			<div className="w-[250px] h-full border-r-2 flex flex-col justify-start relative z-20">
@@ -37,6 +34,11 @@ export const Sidebar = () => {
 				</Box>
 				<Box className="mt-auto">
 					<SidebarItem label="Настройки" icon={IoMdSettings} />
+					<SidebarItem
+						label="Выйти"
+						handleNavigate={() => dispatch(logoutUser())}
+						icon={IoMdSettings}
+					/>
 				</Box>
 			</div>
 			{activeItem && (
