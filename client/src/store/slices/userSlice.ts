@@ -47,23 +47,21 @@ export const registerUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk('user/logout', async () => {
 	try {
-		const response = await AuthService.logout();
+		await AuthService.logout();
 		localStorage.removeItem('token');
-		console.log(response);
 	} catch (error) {
 		console.log(error);
 	}
 });
 
-export const checkAuth = createAsyncThunk('user/check', async () => {
+export const checkAuth = createAsyncThunk('user/check', async (_, {rejectWithValue}) => {
 	try {
 		const response = await axios.get(`${API_URL}/refresh`, {
 			withCredentials: true,
 		});
 		localStorage.setItem('token', response.data.accessToken);
-		return response;
 	} catch (error) {
-		console.log(error);
+		return rejectWithValue(error)
 	}
 });
 
@@ -84,12 +82,7 @@ export const userSlice = createSlice({
 			state.isAuth = false;
 		});
 		builder.addCase(checkAuth.fulfilled, (state) => {
-			try {
-				state.isAuth = true;
-			} catch (error) {
-				console.log(error);
-				
-			}
+			state.isAuth = true;
 		});
 	},
 });

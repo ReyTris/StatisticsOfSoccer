@@ -67,7 +67,6 @@ export class UserService implements IUserService {
 			throw new HTTPError('Не авторизированный пользователь', 401);
 		}
 		const userData = this.tokenService.validateRefreshToken(refreshToken);
-		console.log(userData);
 		
 		const tokenFromDb = this.tokenRepository.findToken(refreshToken);
 		if (!userData || !tokenFromDb) {

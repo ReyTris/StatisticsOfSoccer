@@ -15,14 +15,14 @@ export class TokenService implements ITokenService {
 			payload,
 			process.env.ACCESS_TOKEN_SECRET!,
 			{
-				expiresIn: '15s',
+				expiresIn: '30m',
 			}
 		);
 		const refreshToken = jwt.sign(
 			payload,
 			process.env.REFRESH_TOKEN_SECRET!,
 			{
-				expiresIn: '30s',
+				expiresIn: '30d',
 			}
 		);
 
@@ -34,7 +34,6 @@ export class TokenService implements ITokenService {
 
 	async removeToken(refreshToken: string): Promise<TokenModel> {
 		const tokenData = await this.tokenRepository.removeToken(refreshToken);
-		console.log(tokenData);
 		return tokenData;
 	}
 

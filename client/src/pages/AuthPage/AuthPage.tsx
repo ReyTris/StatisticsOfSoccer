@@ -6,7 +6,6 @@ const AuthPage = () => {
 	const navigate = useNavigate();
 	const isAuth = useAppSelector((state) => state.userReducer.isAuth);
 	useEffect(() => {
-		console.log(isAuth);
 		if (isAuth) {
 			navigate('/');
 		}

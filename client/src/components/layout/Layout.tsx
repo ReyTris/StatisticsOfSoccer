@@ -7,7 +7,6 @@ import Sidebar from './Sidebar';
 export const Layout: FC = () => {
 	const dispatch = useAppDispatch();
 
-	// const state = store.getState();
 	const navigate = useNavigate();
 	const isAuth = useAppSelector((state) => state.userReducer.isAuth);
 
@@ -16,7 +15,7 @@ export const Layout: FC = () => {
 		if (localStorage.getItem('token')) {
 			dispatch(checkAuth());
 		}
-
+		
 		if (!isAuth) {
 			navigate('/auth/login');
 		}
