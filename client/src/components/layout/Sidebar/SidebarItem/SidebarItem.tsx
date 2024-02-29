@@ -1,12 +1,9 @@
-import { default as cn } from "classnames";
-import React from "react";
-import { IconType } from "react-icons";
-import styles from "./Sidebar.module.scss";
+import { default as cn } from 'classnames';
+import React from 'react';
+import { ISidebarItem } from '../sidebar.data';
+import styles from './Sidebar.module.scss';
 
-interface SidebarItemsProps {
-	id?: number;
-	icon: IconType;
-	label: string;
+interface SidebarItemsProps extends ISidebarItem {
 	handleNavigate?: (id: number) => void;
 	className?: string;
 }
@@ -22,7 +19,7 @@ export const SidebarItem: React.FC<SidebarItemsProps> = ({
 		<div
 			className={cn(
 				styles.sidebarItem,
-				"sidebar-item flex items-center px-5 cursor-pointer transition py-2",
+				'sidebar-item flex items-center px-5 cursor-pointer transition py-2',
 				styles[className!]
 			)}
 			onClick={() => handleNavigate!(id!)}

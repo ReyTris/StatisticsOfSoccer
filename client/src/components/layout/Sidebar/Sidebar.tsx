@@ -3,17 +3,24 @@ import { useState } from 'react';
 import { IoMdSettings } from 'react-icons/io';
 import { useAppDispatch } from '../../../hooks/useDispatch';
 import { logoutUser } from '../../../store/slices/userSlice';
-import {} from '../../../store/store';
 import Box from './Box';
 import SidebarItem from './SidebarItem';
 import { SidebarNavigation } from './SidebarNavigation/SidebarNavigation';
-import { sidebarItemsMain } from './sidebar.data';
+import { ISidebarItem, sidebarItemsMain } from './sidebar.data';
 
 export const Sidebar = () => {
-	const [activeItem, setActiveItem] = useState<number | boolean>(false);
+	const [activeItem, setActiveItem] = useState<{
+		state: number | boolean;
+		data: ISidebarItem;
+	}>({ state: false, data: {} as ISidebarItem });
 
 	const handleNavigate = (state: number | boolean) => {
-		setActiveItem(state);
+		const itemData = sidebarItemsMain.filter((item) => item.id === state);
+
+		setActiveItem({
+			state,
+			data: itemData[0],
+		});
 	};
 
 	const dispatch = useAppDispatch();
@@ -26,7 +33,7 @@ export const Sidebar = () => {
 					{sidebarItemsMain.map((item) => (
 						<SidebarItem
 							key={item.id}
-							className={cn(activeItem === item.id && 'active')}
+							className={cn(activeItem.state === item.id && 'active')}
 							handleNavigate={handleNavigate}
 							{...item}
 						/>
@@ -41,10 +48,11 @@ export const Sidebar = () => {
 					/>
 				</Box>
 			</div>
-			{activeItem && (
-				<SidebarNavigation handleNavigate={handleNavigate}>
-					{activeItem}
-				</SidebarNavigation>
+			{activeItem.state && (
+				<SidebarNavigation
+					activeSidebarItem={activeItem.data}
+					handleNavigate={handleNavigate}
+				/>
 			)}
 		</div>
 	);
