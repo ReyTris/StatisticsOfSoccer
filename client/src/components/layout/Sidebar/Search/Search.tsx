@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 interface ISearch {
-	searchHandler: () => void;
+	searchHandler: (data: string) => void;
 	placeholder: string;
 }
 
@@ -13,7 +13,7 @@ export const Search: FC<ISearch> = ({ searchHandler, placeholder }) => {
 			<input
 				className="w-full bg-transparent focus:outline-none"
 				type="text"
-				onChange={searchHandler}
+				onChange={(e) => searchHandler(e.target.value)}
 				placeholder={placeholder}
 			/>
 		</div>

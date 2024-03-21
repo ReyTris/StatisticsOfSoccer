@@ -2,15 +2,17 @@ import { IconType } from 'react-icons';
 import { GrProjects } from 'react-icons/gr';
 import { LuLayoutList } from 'react-icons/lu';
 
-export interface ISidebarItem {
-	id?: number;
+export interface ISidebarItemNavigation {
+	id: number;
 	icon: IconType;
 	label: string;
-	type?: string;
-	searchPlaceholder?: string;
+	type: string;
+	searchPlaceholder: string;
+	className?: string;
+	handleNavigate?: (id: number) => void;
 }
 
-export const sidebarItemsMain: ISidebarItem[] = [
+export const sidebarItemsMain: ISidebarItemNavigation[] = [
 	{
 		id: 1,
 		icon: LuLayoutList,

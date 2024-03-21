@@ -1,18 +1,18 @@
 import { default as cn } from 'classnames';
 import { useState } from 'react';
-import { IoMdSettings } from 'react-icons/io';
+import { IoMdExit, IoMdSettings } from 'react-icons/io';
 import { useAppDispatch } from '../../../hooks/useDispatch';
 import { logoutUser } from '../../../store/slices/userSlice';
 import Box from './Box';
 import SidebarItem from './SidebarItem';
 import { SidebarNavigation } from './SidebarNavigation/SidebarNavigation';
-import { ISidebarItem, sidebarItemsMain } from './sidebar.data';
+import { ISidebarItemNavigation, sidebarItemsMain } from './sidebar.data';
 
 export const Sidebar = () => {
 	const [activeItem, setActiveItem] = useState<{
 		state: number | boolean;
-		data: ISidebarItem;
-	}>({ state: false, data: {} as ISidebarItem });
+		data: ISidebarItemNavigation;
+	}>({ state: false, data: {} as ISidebarItemNavigation });
 
 	const handleNavigate = (state: number | boolean) => {
 		const itemData = sidebarItemsMain.filter((item) => item.id === state);
@@ -44,7 +44,7 @@ export const Sidebar = () => {
 					<SidebarItem
 						label="Выйти"
 						handleNavigate={() => dispatch(logoutUser())}
-						icon={IoMdSettings}
+						icon={IoMdExit}
 					/>
 				</Box>
 			</div>
