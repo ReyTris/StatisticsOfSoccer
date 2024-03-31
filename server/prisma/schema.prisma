@@ -8,16 +8,18 @@ datasource db {
 }
 
 model UserModel {
-  id             Int         @id @default(autoincrement())
-  name           String
-  email          String      @unique
-  password       String
-  isActivated    Boolean     @default(false) @map("is_activated")
-  activationLink String?     @map("activation_link")
-  created_at     DateTime    @default(now())
-  updated_at     DateTime    @updatedAt
-  tasks          TaskModel[]
-  token          TokenModel?
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  email                String                 @unique
+  password             String
+  isActivated          Boolean                @default(false) @map("is_activated")
+  activationLink       String?                @map("activation_link")
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  tasks                TaskModel[]
+  token                TokenModel?
+  projects             ProjectModel[]
+  ProjectsOnUsersModel ProjectsOnUsersModel[]
 
   @@map("user")
 }
@@ -41,6 +43,28 @@ model TaskModel {
   user        UserModel @relation(fields: [userId], references: [id])
 
   @@map("task")
+}
+
+model ProjectModel {
+  id         Int         @id @default(autoincrement())
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  name       String      @unique
+  description String
+  user       UserModel[]
+
+  ProjectsOnUsersModel ProjectsOnUsersModel[]
+}
+
+model ProjectsOnUsersModel {
+  user       UserModel    @relation(fields: [userId], references: [id])
+  userId     Int
+  project    ProjectModel @relation(fields: [projectId], references: [id])
+  projectId  Int
+  assignedAt DateTime     @default(now())
+  assignedBy String
+
+  @@id([userId, projectId])
 }
 
 enum Priority {
