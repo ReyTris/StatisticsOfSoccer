@@ -9,8 +9,9 @@ import 'reflect-metadata';
 import { PrismaService } from './DB/db.config';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 import { ILogger } from './logger/logger.interface';
+import { IProjectController } from './projects/projects.controller.interface';
 import { TYPES } from './types';
-import { UserController } from './users/users.controller';
+import { IUserController } from './users/users.controller.interface';
 
 @injectable()
 export class App {
@@ -20,7 +21,9 @@ export class App {
 
 	constructor(
 		@inject(TYPES.ILogger) private logger: ILogger,
-		@inject(TYPES.UserController) private UserController: UserController,
+		@inject(TYPES.UserController) private UserController: IUserController,
+		@inject(TYPES.IProjectController)
+		private ProjectController: IProjectController,
 		@inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
 		@inject(TYPES.PrismaService) private prismaService: PrismaService
 	) {
@@ -41,7 +44,10 @@ export class App {
 	}
 
 	userRoutes() {
-		this.app.use('/api', this.UserController.router);
+		this.app.use('/api', [
+			this.UserController.router,
+			this.ProjectController.router,
+		]);
 	}
 
 	useExceptionFilter() {
