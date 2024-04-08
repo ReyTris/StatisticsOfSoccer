@@ -1,34 +1,19 @@
-import { FC, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/useDispatch';
-import { checkAuth } from '../../store/slices/userSlice';
-import Sidebar from './Sidebar';
+import { useEffect } from 'react';
+import { CompetitionsService } from '../../services/competitions/competitions.service';
 
-export const Layout: FC = () => {
-	const dispatch = useAppDispatch();
-
-	const navigate = useNavigate();
-	const isAuth = useAppSelector((state) => state.userReducer.isAuth);
-
-
+function Layout() {
 	useEffect(() => {
-		if (localStorage.getItem('token')) {
-			dispatch(checkAuth());
-		}
-		
-		if (!isAuth) {
-			navigate('/auth/login');
-		}
-	}, [navigate, isAuth, dispatch]);
+		const fetchData = async () => {
+			try {
+				const result = await CompetitionsService.getAllTeams();
+				console.log(result.data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		fetchData();
+	});
+	return <div>Layout</div>;
+}
 
-	return (
-		<div className="h-screen bg-gray-300">
-			<div className="h-full mx-auto xl:px-30">
-				<Sidebar />
-				<div className="">
-					<Outlet />
-				</div>
-			</div>
-		</div>
-	);
-};
+export default Layout;
