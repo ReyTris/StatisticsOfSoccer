@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import userReducer from './slices/userSlice';
+import competitionsReducer from './slices/competitionsSlice';
 
 export const store = configureStore({
 	reducer: {
-		userReducer,
+		competitionsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({

@@ -10,8 +10,3 @@ export const $api = axios.create({
 		'X-Auth-Token': '359669d2034d4b95bf5d81c61262e5f4',
 	},
 });
-
-// $api.interceptors.request.use((config) => {
-// 	config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-// 	return config;
-// });

@@ -23,9 +23,35 @@ export const $api = axios.create({
 	},
 });
 
-app.get('/matches', async (req, res) => {
+app.get('/teams', async (req, res) => {
 	try {
 		const { data } = await $api.get('/teams/');
+		res.json(data);
+	} catch (error) {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
+app.get('/competitions', async (req, res) => {
+	try {
+		const { data } = await $api.get('/competitions/');
+		res.json(data);
+	} catch (error) {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
+app.get('/competitions/matches/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const { data } = await $api.get(`/competitions/${id}/matches/`);
+		res.json(data);
+	} catch (error) {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
+app.get('/teams/matches/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const { data } = await $api.get(`/teams/${id}/matches/`);
 		res.json(data);
 	} catch (error) {
 		res.status(500).json({ error: 'Internal server error' });

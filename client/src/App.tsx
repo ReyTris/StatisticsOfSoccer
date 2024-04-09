@@ -1,13 +1,5 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-
-const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <Layout />,
-		children: [],
-	},
-]);
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router/router.tsx';
 
 function App() {
 	return <RouterProvider router={router} />;
