@@ -1,27 +1,17 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/useDispatch';
-import { allCompetitions } from '../../store/slices/competitionsSlice';
-import Button from '../ui/Button';
-import { NavItem } from '../ui/NavItem';
+import Header from '../Header';
 
 function Layout() {
 	const navigate = useNavigate();
-	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		navigate('/competitions');
-		dispatch(allCompetitions());
-	}, [dispatch, navigate]);
-
-	const dataComp = useAppSelector((state) => state.competitionsReducer.data);
-
-	console.log(dataComp);
+		navigate('/leagues');
+	}, [navigate]);
 	return (
-		<div>
+		<div className='m-0 m-auto p-10 max-w-screen-2xl'>
+			<Header />
 			<Outlet />
-			<Button onClick={(e) => console.log(e.target)}>Click</Button>
-			<NavItem to="/">asdf</NavItem>
 		</div>
 	);
 }

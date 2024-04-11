@@ -1,0 +1,7 @@
+.navLink {
+	@apply px-10 py-5 rounded-default hover:bg-blue-200 hover:text-white transition-all border-2 border-blue-200;
+}
+
+.navActiveLink {
+	color: red;
+}

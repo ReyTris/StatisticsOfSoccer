@@ -1,10 +1,11 @@
 // const initialState
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { ICompetition } from '../../models/response/ICompetitionsResponse';
 import { CompetitionsService } from '../../services/competitions/competitions.service';
 
 const initialState = {
-	data: {},
+	data: [] as ICompetition[],
 };
 
 export const allCompetitions = createAsyncThunk(
@@ -27,7 +28,7 @@ export const competitionsSlice = createSlice({
 	reducers: {},
 	extraReducers: (builder) => {
 		builder.addCase(allCompetitions.fulfilled, (state, action) => {
-			state.data = { ...state.data, ...action.payload.data };
+			state.data = action.payload.data.competitions ;
 		});
 	},
 });
