@@ -5,6 +5,7 @@ import { ICompetition } from '../../models/response/ICompetitionsResponse';
 import { CompetitionsService } from '../../services/competitions/competitions.service';
 
 const initialState = {
+	loading: false,
 	data: [] as ICompetition[],
 };
 
@@ -27,8 +28,12 @@ export const competitionsSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: (builder) => {
+		builder.addCase(allCompetitions.pending, (state) => {
+			state.loading = true;
+		});
 		builder.addCase(allCompetitions.fulfilled, (state, action) => {
-			state.data = action.payload.data.competitions ;
+			state.loading = false;
+			state.data = action.payload.data.competitions;
 		});
 	},
 });
