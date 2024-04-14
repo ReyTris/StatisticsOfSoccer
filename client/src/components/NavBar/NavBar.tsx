@@ -17,7 +17,7 @@ const navLinkData: INavLink[] = [
 
 export const NavBar = () => {
 	return (
-		<div className="flex">
+		<nav className="flex">
 			{navLinkData.map(({ to, label }: INavLink) => (
 				<NavLink
 					key={label}
@@ -29,6 +29,6 @@ export const NavBar = () => {
 					{label}
 				</NavLink>
 			))}
-		</div>
+		</nav>
 	);
 };

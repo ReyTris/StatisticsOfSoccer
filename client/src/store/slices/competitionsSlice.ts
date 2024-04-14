@@ -7,6 +7,7 @@ import { CompetitionsService } from '../../services/competitions/competitions.se
 const initialState = {
 	loading: false,
 	data: [] as ICompetition[],
+	matches: [],
 };
 
 export const allCompetitions = createAsyncThunk(
@@ -14,6 +15,19 @@ export const allCompetitions = createAsyncThunk(
 	async (_, { rejectWithValue }) => {
 		try {
 			const response = await CompetitionsService.getAllCompetitions();
+
+			return response;
+		} catch (error) {
+			console.log(error);
+			return rejectWithValue(error);
+		}
+	}
+);
+export const competitionsMatches = createAsyncThunk(
+	'competitions/matches',
+	async (id: number, { rejectWithValue }) => {
+		try {
+			const response = await CompetitionsService.getCompetitionMatches(id);
 
 			return response;
 		} catch (error) {
@@ -35,9 +49,14 @@ export const competitionsSlice = createSlice({
 			state.loading = false;
 			state.data = action.payload.data.competitions;
 		});
+		builder.addCase(competitionsMatches.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(competitionsMatches.fulfilled, (state, action) => {
+			state.loading = false;
+			state.matches = action.payload.data.matches;
+		});
 	},
 });
-
-// export const { setUser } = userSlice.reducer;
 
 export default competitionsSlice.reducer;
