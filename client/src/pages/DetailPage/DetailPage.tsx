@@ -1,40 +1,44 @@
 import { Breadcrumb, Table } from 'antd';
-import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Loader from '../../components/ui/Loader';
 import { CompetitionsBreadcrumbRoute } from '../../constants/breadcrumbs.routes';
 import { customStatus, tableColumns } from '../../constants/table.columns';
-import { useAppDispatch, useAppSelector } from '../../hooks/useDispatch';
+import { useGetMatchesData } from '../../hooks/useGetData';
 import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
-import { competitionsMatches } from '../../store/slices/competitionsSlice';
 import { ITableData } from './types';
 
 const DetailPage = () => {
 	const location = useLocation();
 	const pathnames = location.pathname.split('/');
 	const matchId = Number(pathnames.at(-1));
-	const [dataList, setDataList] = useState<ICompetitionMatch[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const dispatch = useAppDispatch();
+	// const [dataList, setDataList] = useState<ICompetitionMatch[]>([]);
+	// const [isLoading, setIsLoading] = useState<boolean>(true);
+	// const dispatch = useAppDispatch();
 
-	const { matches: matchesList, loading: loadingStatus } = useAppSelector(
-		(state) => state.competitionsReducer
+	const { dataList, isLoading } = useGetMatchesData(
+		'matches',
+		'competitionMatchesDispatch',
+		matchId
 	);
 
-	useEffect(() => {
-		dispatch(competitionsMatches(matchId));
-	}, [dispatch, matchId]);
+	// const { dataList: matchesList, loading: loadingStatus } = useAppSelector(
+	// 	(state) => state.competitionsReducer
+	// );
 
-	useEffect(() => {
-		setDataList(matchesList);
-		console.log(dataList);
-	}, [matchesList]);
+	// useEffect(() => {
+	// 	dispatch(competitionsMatches(matchId));
+	// }, [dispatch, matchId]);
 
-	useEffect(() => {
-		if (!loadingStatus && matchesList.length > 0) {
-			setIsLoading(false);
-		}
-	}, [loadingStatus, matchesList]);
+	// useEffect(() => {
+	// 	setDataList(matchesList);
+	// 	console.log(dataList);
+	// }, [matchesList]);
+
+	// useEffect(() => {
+	// 	if (!loadingStatus && matchesList.length > 0) {
+	// 		setIsLoading(false);
+	// 	}
+	// }, [loadingStatus, matchesList]);
 
 	const dataMap = dataList.map(
 		(item: ICompetitionMatch, index: number): ITableData => {
