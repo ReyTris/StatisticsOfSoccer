@@ -3,9 +3,9 @@ export interface ITableData {
 	date: string;
 	time: string;
 	status: string;
-	homeTeam: string;
+	homeTeam: ITeam;
 	separator: string;
-	awayTeam: string;
+	awayTeam: ITeam;
 	score: IScore;
 }
 
@@ -19,4 +19,9 @@ export interface IScore {
 		away: number;
 	};
 	winner: string;
+}
+
+export interface ITeam {
+	name: string;
+	crest: string;
 }

@@ -49,15 +49,7 @@ export interface ICompetitionMatch {
 	};
 	id: number;
 	utcDate: string;
-	status:
-		| 'SCHEDULED'
-		| 'LIVE'
-		| 'IN_PLAY'
-		| 'PAUSED'
-		| 'FINISHED'
-		| 'POSTPONED'
-		| 'SUSPENDED'
-		| 'CANCELED';
+	status: string;
 	matchday: number | null;
 	stage: 'REGULAR_SEASON' | string;
 	group: string | null;

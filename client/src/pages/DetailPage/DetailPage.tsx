@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Loader from '../../components/ui/Loader';
 import { CompetitionsBreadcrumbRoute } from '../../constants/breadcrumbs.routes';
-import { tableColumns } from '../../constants/table.columns';
+import { customStatus, tableColumns } from '../../constants/table.columns';
 import { useAppDispatch, useAppSelector } from '../../hooks/useDispatch';
 import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
 import { competitionsMatches } from '../../store/slices/competitionsSlice';
@@ -42,10 +42,10 @@ const DetailPage = () => {
 				key: index,
 				date: item.utcDate,
 				time: item.utcDate,
-				status: item.status,
-				homeTeam: item.homeTeam.name,
+				status: customStatus[item.status],
+				homeTeam: item.homeTeam,
 				separator: '-',
-				awayTeam: item.awayTeam.name,
+				awayTeam: item.awayTeam,
 				score: item.score,
 			};
 		}
@@ -63,7 +63,7 @@ const DetailPage = () => {
 				<Breadcrumb separator="/" items={CompetitionsBreadcrumbRoute} />
 			</div>
 
-			<div>
+			<div className="mt-5">
 				<Table dataSource={dataMap} columns={tableColumns} />
 			</div>
 		</div>
