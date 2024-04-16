@@ -1,9 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import CompetitionsPage from '../pages/CompetitionsPage';
-import DetailPage from '../pages/DetailPage/DetailPage';
-import TeamMatchesPage from '../pages/TeamMatchesPage/TeamMatchesPage';
 import TeamsPage from '../pages/TeamsPage';
+import { InitMatchesPage } from './pageRoute';
 export const router = createBrowserRouter([
 	{
 		path: '/',
@@ -21,11 +20,21 @@ export const router = createBrowserRouter([
 
 			{
 				path: 'competitions/:id',
-				element: <DetailPage />,
+				element: (
+					<InitMatchesPage
+						selectorName="matches"
+						actionName="competitionMatchesDispatch"
+					/>
+				),
 			},
 			{
 				path: 'teams/:id',
-				element: <TeamMatchesPage />,
+				element: (
+					<InitMatchesPage
+						selectorName="teamMatches"
+						actionName="teamMatchesDispatch"
+					/>
+				),
 			},
 		],
 	},

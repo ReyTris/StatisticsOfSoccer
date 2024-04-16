@@ -1,45 +1,11 @@
 import { Breadcrumb, Table } from 'antd';
-import { useLocation } from 'react-router-dom';
 import Loader from '../../components/ui/Loader';
 import { CompetitionsBreadcrumbRoute } from '../../constants/breadcrumbs.routes';
 import { customStatus, tableColumns } from '../../constants/table.columns';
-import { useGetMatchesData } from '../../hooks/useGetData';
 import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
-import { ITableData } from './types';
+import { ITableData } from './types'; // Импортируем HOC
 
-const DetailPage = () => {
-	const location = useLocation();
-	const pathnames = location.pathname.split('/');
-	const matchId = Number(pathnames.at(-1));
-	// const [dataList, setDataList] = useState<ICompetitionMatch[]>([]);
-	// const [isLoading, setIsLoading] = useState<boolean>(true);
-	// const dispatch = useAppDispatch();
-
-	const { dataList, isLoading } = useGetMatchesData(
-		'matches',
-		'competitionMatchesDispatch',
-		matchId
-	);
-
-	// const { dataList: matchesList, loading: loadingStatus } = useAppSelector(
-	// 	(state) => state.competitionsReducer
-	// );
-
-	// useEffect(() => {
-	// 	dispatch(competitionsMatches(matchId));
-	// }, [dispatch, matchId]);
-
-	// useEffect(() => {
-	// 	setDataList(matchesList);
-	// 	console.log(dataList);
-	// }, [matchesList]);
-
-	// useEffect(() => {
-	// 	if (!loadingStatus && matchesList.length > 0) {
-	// 		setIsLoading(false);
-	// 	}
-	// }, [loadingStatus, matchesList]);
-
+const DetailPage = ({ dataList, isLoading }) => {
 	const dataMap = dataList.map(
 		(item: ICompetitionMatch, index: number): ITableData => {
 			return {

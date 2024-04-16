@@ -48,7 +48,6 @@ export const useGetMatchesData = (
 
 	useEffect(() => {
 		setDataList(matchesList);
-		console.log(matchesList);
 	}, [matchesList]);
 
 	useEffect(() => {
