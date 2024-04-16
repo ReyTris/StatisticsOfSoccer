@@ -1,11 +1,12 @@
-import { Breadcrumb, Table } from 'antd';
+import { Breadcrumb, DatePicker, Space, Table } from 'antd';
 import Loader from '../../components/ui/Loader';
 import { CompetitionsBreadcrumbRoute } from '../../constants/breadcrumbs.routes';
 import { customStatus, tableColumns } from '../../constants/table.columns';
 import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
 import { ITableData } from './types'; // Импортируем HOC
+const { RangePicker } = DatePicker;
 
-const DetailPage = ({ dataList, isLoading }) => {
+const DetailPage = ({ dataList, isLoading, startDateHandler }) => {
 	const dataMap = dataList.map(
 		(item: ICompetitionMatch, index: number): ITableData => {
 			return {
@@ -32,6 +33,14 @@ const DetailPage = ({ dataList, isLoading }) => {
 			<div>
 				<Breadcrumb separator="/" items={CompetitionsBreadcrumbRoute} />
 			</div>
+
+			<Space direction="vertical" size={5}>
+				<RangePicker
+					onChange={(value, dateString) => {
+						startDateHandler(dateString);
+					}}
+				/>
+			</Space>
 
 			<div className="mt-5">
 				<Table dataSource={dataMap} columns={tableColumns} />

@@ -15,4 +15,11 @@ export const CompetitionsService = {
 	async getTeamMatches(id: number): Promise<AxiosResponse> {
 		return $api.get(`/teams/matches/${id}`);
 	},
+	async getTeamMatchesDate(
+		id: number,
+		dateFrom: string,
+		dateTo: string
+	): Promise<AxiosResponse> {
+		return $api.get(`/teams/matches/${id}/${dateFrom}/${dateTo}`);
+	},
 };

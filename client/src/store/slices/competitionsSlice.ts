@@ -17,6 +17,7 @@ export interface IInitialStateData {
 	matches: ICompetitionMatch[];
 	teams: ITeamResponse[];
 	teamMatches: ICompetitionMatch[];
+	teamMatchesDate: ICompetitionMatch[];
 }
 
 const initialState: IInitialState = {
@@ -26,6 +27,7 @@ const initialState: IInitialState = {
 		matches: [],
 		teams: [],
 		teamMatches: [],
+		teamMatchesDate: [],
 	},
 };
 
@@ -82,6 +84,24 @@ export const teamMatches = createAsyncThunk<AxiosResponse<any, any>, number>(
 		}
 	}
 );
+export const teamMatchesDate = createAsyncThunk<AxiosResponse<any, any>, any>(
+	'competitions/teamMatchesDate',
+	async (data, { rejectWithValue }) => {
+		const { id, dateFrom, dateTo } = data;
+		try {
+			const response = await CompetitionsService.getTeamMatchesDate(
+				id,
+				dateFrom,
+				dateTo
+			);
+
+			return response;
+		} catch (error) {
+			console.log(error);
+			return rejectWithValue(error);
+		}
+	}
+);
 
 export const competitionsSlice = createSlice({
 	name: 'competitions',
@@ -115,6 +135,13 @@ export const competitionsSlice = createSlice({
 		builder.addCase(teamMatches.fulfilled, (state, action) => {
 			state.loading = false;
 			state.data.teamMatches = action.payload.data.matches;
+		});
+		builder.addCase(teamMatchesDate.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(teamMatchesDate.fulfilled, (state, action) => {
+			state.loading = false;
+			state.data.teamMatchesDate = action.payload.data.matches;
 		});
 	},
 });

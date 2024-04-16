@@ -57,6 +57,17 @@ app.get('/teams/matches/:id', async (req, res) => {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 });
+app.get('/teams/matches/:id/:dateFrom/:dateTo', async (req, res) => {
+	const { id, dateFrom, dateTo } = req.params;
+	try {
+		const { data } = await $api.get(
+			`/teams/${id}/matches?dateFrom=${dateFrom}&dateTo=${dateTo}`
+		);
+		res.json(data);
+	} catch (error) {
+		res.status(500).json({ error: 'Internal server error' });
+	}
+});
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
