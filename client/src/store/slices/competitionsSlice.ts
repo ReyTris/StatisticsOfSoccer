@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
 import { ICompetition } from '../../models/response/ICompetitionsResponse';
+import { ITeamResponse } from '../../models/response/ITeamResponse';
 import { CompetitionsService } from '../../services/competitions/competitions.service';
 
 export interface IInitialState {
@@ -14,6 +15,8 @@ export interface IInitialState {
 export interface IInitialStateData {
 	competitions: ICompetition[];
 	matches: ICompetitionMatch[];
+	teams: ITeamResponse[];
+	teamMatches: ICompetitionMatch[];
 }
 
 const initialState: IInitialState = {
@@ -21,6 +24,8 @@ const initialState: IInitialState = {
 	data: {
 		competitions: [],
 		matches: [],
+		teams: [],
+		teamMatches: [],
 	},
 };
 
@@ -51,6 +56,33 @@ export const competitionMatches = createAsyncThunk<
 	}
 });
 
+export const allTeams = createAsyncThunk<AxiosResponse<any, any>, undefined>(
+	'competitions/teams',
+	async (_, { rejectWithValue }) => {
+		try {
+			const response = await CompetitionsService.getAllTeams();
+
+			return response;
+		} catch (error) {
+			console.log(error);
+			return rejectWithValue(error);
+		}
+	}
+);
+export const teamMatches = createAsyncThunk<AxiosResponse<any, any>, number>(
+	'competitions/teamMatches',
+	async (id: number, { rejectWithValue }) => {
+		try {
+			const response = await CompetitionsService.getTeamMatches(id);
+
+			return response;
+		} catch (error) {
+			console.log(error);
+			return rejectWithValue(error);
+		}
+	}
+);
+
 export const competitionsSlice = createSlice({
 	name: 'competitions',
 	initialState,
@@ -69,6 +101,20 @@ export const competitionsSlice = createSlice({
 		builder.addCase(competitionMatches.fulfilled, (state, action) => {
 			state.loading = false;
 			state.data.matches = action.payload.data.matches;
+		});
+		builder.addCase(allTeams.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(allTeams.fulfilled, (state, action) => {
+			state.loading = false;
+			state.data.teams = action.payload.data.teams;
+		});
+		builder.addCase(teamMatches.pending, (state) => {
+			state.loading = true;
+		});
+		builder.addCase(teamMatches.fulfilled, (state, action) => {
+			state.loading = false;
+			state.data.teamMatches = action.payload.data.matches;
 		});
 	},
 });

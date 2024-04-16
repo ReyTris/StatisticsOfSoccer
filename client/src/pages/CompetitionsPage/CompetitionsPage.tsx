@@ -57,7 +57,7 @@ const CompetitionsPage = () => {
 				<div>
 					<div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 mt-10">
 						{currentPageData.map(({ name, id, emblem, area }) => (
-							<Link to={`/leagues/${id}`} key={id}>
+							<Link to={`/competitions/${id}`} key={id}>
 								<Card areaName={area.name} name={name} emblem={emblem} />
 							</Link>
 						))}
@@ -65,7 +65,7 @@ const CompetitionsPage = () => {
 					<Pagination
 						className="mt-10"
 						current={currentPage}
-						total={dataList.length}
+						total={filterDataList.length}
 						pageSize={itemsPerPage}
 						onChange={handleChangePage}
 					/>

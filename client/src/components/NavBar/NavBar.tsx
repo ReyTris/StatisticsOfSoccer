@@ -4,7 +4,7 @@ import { INavLink } from './types';
 
 const navLinkData: INavLink[] = [
 	{
-		to: '/leagues',
+		to: '/competitions',
 		className: ``,
 		label: 'Лиги',
 	},

@@ -3,18 +3,24 @@ import {
 	IInitialState,
 	IInitialStateData,
 	allCompetitions,
+	allTeams,
 	competitionMatches,
+	teamMatches,
 } from '../store/slices/competitionsSlice';
 import { useAppDispatch, useAppSelector } from './useDispatch';
 
 interface IActionCreators {
 	competitionsDispatch: () => void;
 	competitionMatchesDispatch: (id: number) => void;
+	teamMatchesDispatch: (id: number) => void;
+	teamsDispatch: () => void;
 }
 
 const actionCreators = {
 	competitionsDispatch: allCompetitions,
 	competitionMatchesDispatch: competitionMatches,
+	teamsDispatch: allTeams,
+	teamMatchesDispatch: teamMatches,
 };
 
 export const useGetMatchesData = (
@@ -42,6 +48,7 @@ export const useGetMatchesData = (
 
 	useEffect(() => {
 		setDataList(matchesList);
+		console.log(matchesList);
 	}, [matchesList]);
 
 	useEffect(() => {

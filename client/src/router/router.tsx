@@ -2,16 +2,15 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import CompetitionsPage from '../pages/CompetitionsPage';
 import DetailPage from '../pages/DetailPage/DetailPage';
+import TeamMatchesPage from '../pages/TeamMatchesPage/TeamMatchesPage';
 import TeamsPage from '../pages/TeamsPage';
-// import CompetitionsPage from '../pages/CompetitionsPage';
-
 export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
 		children: [
 			{
-				path: 'leagues',
+				path: 'competitions',
 				element: <CompetitionsPage />,
 				children: [],
 			},
@@ -21,8 +20,12 @@ export const router = createBrowserRouter([
 			},
 
 			{
-				path: 'leagues/:id',
+				path: 'competitions/:id',
 				element: <DetailPage />,
+			},
+			{
+				path: 'teams/:id',
+				element: <TeamMatchesPage />,
 			},
 		],
 	},
