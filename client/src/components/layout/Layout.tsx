@@ -8,7 +8,7 @@ function Layout() {
 
 	useEffect(() => {
 		if (location.pathname == '/') {
-			navigate('/leagues');
+			navigate('/competitions');
 		}
 	}, [location.pathname, navigate]);
 

@@ -1,21 +1,11 @@
 import { useEffect, useState } from 'react';
+import { IActionCreators, actionCreators } from '../store/slices/actions';
 import {
-	IInitialState,
-	IInitialStateData,
-	allCompetitions,
-	competitionMatches,
+    IInitialState,
+    IInitialStateData
 } from '../store/slices/competitionsSlice';
 import { useAppDispatch, useAppSelector } from './useDispatch';
 
-interface IActionCreators {
-	competitionsDispatch: () => void;
-	competitionMatchesDispatch: (id: number) => void;
-}
-
-const actionCreators = {
-	competitionsDispatch: allCompetitions,
-	competitionMatchesDispatch: competitionMatches,
-};
 
 export const useGetMatchesData = (
 	nameSelector: string,

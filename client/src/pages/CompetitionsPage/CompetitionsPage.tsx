@@ -4,18 +4,17 @@ import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import Loader from '../../components/ui/Loader';
 import SearchField from '../../components/ui/SearchField';
-import { useGetMatchesData } from '../../hooks/useGetData';
 import { ICompetition } from '../../models/response/ICompetitionsResponse';
 
-const CompetitionsPage = () => {
+interface PropsDataWithLoading {
+	dataList: any;
+	isLoading: boolean
+}
+
+const CompetitionsPage = ({ dataList, isLoading }:PropsDataWithLoading) => {
 	const [filterDataList, setFilterDataList] = useState<ICompetition[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const itemsPerPage = 6;
-
-	const { dataList, isLoading } = useGetMatchesData(
-		'competitions',
-		'competitionsDispatch'
-	);
 
 	const searchHandler = useCallback(
 		(value: string) => {
@@ -57,7 +56,7 @@ const CompetitionsPage = () => {
 				<div>
 					<div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 mt-10">
 						{currentPageData.map(({ name, id, emblem, area }) => (
-							<Link to={`/leagues/${id}`} key={id}>
+							<Link to={`/competitions/${id}`} key={id}>
 								<Card areaName={area.name} name={name} emblem={emblem} />
 							</Link>
 						))}

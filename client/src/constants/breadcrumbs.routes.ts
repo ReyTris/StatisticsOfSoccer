@@ -1,7 +1,7 @@
 const CompetitionsBreadcrumbRoute = [
 	{
 		title: 'Лиги',
-		href: '/leagues',
+		href: '/competitions',
 	},
 	{
 		title: 'Название лиги',
@@ -9,3 +9,4 @@ const CompetitionsBreadcrumbRoute = [
 ];
 
 export { CompetitionsBreadcrumbRoute };
+
