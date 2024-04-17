@@ -2,6 +2,7 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
+import { IParamsDate } from '../../hooks/useGetData';
 import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
 import { ICompetition } from '../../models/response/ICompetitionsResponse';
 import { ITeamResponse } from '../../models/response/ITeamResponse';
@@ -16,8 +17,7 @@ export interface IInitialStateData {
 	competitions: ICompetition[];
 	matches: ICompetitionMatch[];
 	teams: ITeamResponse[];
-	teamMatches: ICompetitionMatch[];
-	teamMatchesDate: ICompetitionMatch[];
+	nameTeam: string;
 }
 
 const initialState: IInitialState = {
@@ -26,8 +26,7 @@ const initialState: IInitialState = {
 		competitions: [],
 		matches: [],
 		teams: [],
-		teamMatches: [],
-		teamMatchesDate: [],
+		nameTeam: '',
 	},
 };
 
@@ -86,10 +85,31 @@ export const teamMatches = createAsyncThunk<AxiosResponse<any, any>, number>(
 );
 export const teamMatchesDate = createAsyncThunk<AxiosResponse<any, any>, any>(
 	'competitions/teamMatchesDate',
-	async (data, { rejectWithValue }) => {
+	async (data: IParamsDate, { rejectWithValue }) => {
 		const { id, dateFrom, dateTo } = data;
 		try {
 			const response = await CompetitionsService.getTeamMatchesDate(
+				id,
+				dateFrom,
+				dateTo
+			);
+
+			return response;
+		} catch (error) {
+			console.log(error);
+			return rejectWithValue(error);
+		}
+	}
+);
+export const competitionMatchesDate = createAsyncThunk<
+	AxiosResponse<any, any>,
+	any
+>(
+	'competitions/competitionMatchesDate',
+	async (data: IParamsDate, { rejectWithValue }) => {
+		const { id, dateFrom, dateTo } = data;
+		try {
+			const response = await CompetitionsService.getCompetitionMatchesDate(
 				id,
 				dateFrom,
 				dateTo
@@ -117,10 +137,12 @@ export const competitionsSlice = createSlice({
 		});
 		builder.addCase(competitionMatches.pending, (state) => {
 			state.loading = true;
+			state.data.matches = [];
 		});
 		builder.addCase(competitionMatches.fulfilled, (state, action) => {
 			state.loading = false;
 			state.data.matches = action.payload.data.matches;
+			state.data.nameTeam = action.payload.data.competition.name;
 		});
 		builder.addCase(allTeams.pending, (state) => {
 			state.loading = true;
@@ -131,6 +153,7 @@ export const competitionsSlice = createSlice({
 		});
 		builder.addCase(teamMatches.pending, (state) => {
 			state.loading = true;
+			state.data.matches = [];
 		});
 		builder.addCase(teamMatches.fulfilled, (state, action) => {
 			state.loading = false;
@@ -138,8 +161,17 @@ export const competitionsSlice = createSlice({
 		});
 		builder.addCase(teamMatchesDate.pending, (state) => {
 			state.loading = true;
+			state.data.matches = [];
 		});
 		builder.addCase(teamMatchesDate.fulfilled, (state, action) => {
+			state.loading = false;
+			state.data.matches = action.payload.data.matches;
+		});
+		builder.addCase(competitionMatchesDate.pending, (state) => {
+			state.loading = true;
+			state.data.matches = [];
+		});
+		builder.addCase(competitionMatchesDate.fulfilled, (state, action) => {
 			state.loading = false;
 			state.data.matches = action.payload.data.matches;
 		});

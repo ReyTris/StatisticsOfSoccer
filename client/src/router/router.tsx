@@ -23,7 +23,8 @@ export const router = createBrowserRouter([
 				element: (
 					<InitMatchesPage
 						selectorName="matches"
-						actionName="competitionMatchesDispatch"
+						actionName="competitionMatchesAction"
+						actionNameByDate="competitionMatchesByDateAction"
 					/>
 				),
 			},
@@ -32,7 +33,8 @@ export const router = createBrowserRouter([
 				element: (
 					<InitMatchesPage
 						selectorName="matches"
-						actionName="teamMatchesDispatch"
+						actionName="teamMatchesAction"
+						actionNameByDate="teamMatchesByDateAction"
 					/>
 				),
 			},

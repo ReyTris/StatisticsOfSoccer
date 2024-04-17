@@ -22,4 +22,11 @@ export const CompetitionsService = {
 	): Promise<AxiosResponse> {
 		return $api.get(`/teams/matches/${id}/${dateFrom}/${dateTo}`);
 	},
+	async getCompetitionMatchesDate(
+		id: number,
+		dateFrom: string,
+		dateTo: string
+	): Promise<AxiosResponse> {
+		return $api.get(`/competitions/matches/${id}/${dateFrom}/${dateTo}`);
+	},
 };

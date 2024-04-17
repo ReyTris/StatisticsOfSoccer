@@ -5,22 +5,38 @@ import {
 	allCompetitions,
 	allTeams,
 	competitionMatches,
+	competitionMatchesDate,
 	teamMatches,
+	teamMatchesDate,
 } from '../store/slices/competitionsSlice';
 import { useAppDispatch, useAppSelector } from './useDispatch';
 
-interface IActionCreators {
-	competitionsDispatch: () => void;
-	competitionMatchesDispatch: (id: number) => void;
-	teamMatchesDispatch: (id: number) => void;
-	teamsDispatch: () => void;
+export interface IParamsDate {
+	id: number;
+	dateFrom: string;
+	dateTo: string;
 }
 
-const actionCreators = {
-	competitionsDispatch: allCompetitions,
-	competitionMatchesDispatch: competitionMatches,
-	teamsDispatch: allTeams,
-	teamMatchesDispatch: teamMatches,
+export interface IActionCreators {
+	competitionsAction: () => void;
+	teamsAction: () => void;
+}
+export interface IActionCreatorsById {
+	competitionMatchesAction: (id: number) => void;
+	teamMatchesAction: (id: number) => void;
+}
+export interface IActionCreatorsByDate {
+	teamMatchesByDateAction: (data: IParamsDate) => void;
+	competitionMatchesByDateAction: (data: IParamsDate) => void;
+}
+
+export const actionCreators = {
+	competitionsAction: allCompetitions,
+	competitionMatchesAction: competitionMatches,
+	teamsAction: allTeams,
+	teamMatchesAction: teamMatches,
+	teamMatchesByDateAction: teamMatchesDate,
+	competitionMatchesByDateAction: competitionMatchesDate,
 };
 
 export const useGetMatchesData = (
@@ -40,7 +56,9 @@ export const useGetMatchesData = (
 
 	useEffect(() => {
 		if (matchId) {
-			dispatch(actionCreators[nameAction as keyof IActionCreators](matchId));
+			dispatch(
+				actionCreators[nameAction as keyof IActionCreatorsById](matchId)
+			);
 		} else {
 			dispatch(actionCreators[nameAction as keyof IActionCreators]());
 		}

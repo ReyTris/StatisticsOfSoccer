@@ -12,7 +12,7 @@ const TeamsPage = () => {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const itemsPerPage = 6;
 
-	const { dataList, isLoading } = useGetMatchesData('teams', 'teamsDispatch');
+	const { dataList, isLoading } = useGetMatchesData('teams', 'teamsAction');
 
 	const searchHandler = useCallback(
 		(value: string) => {

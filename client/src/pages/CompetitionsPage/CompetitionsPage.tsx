@@ -14,7 +14,7 @@ const CompetitionsPage = () => {
 
 	const { dataList, isLoading } = useGetMatchesData(
 		'competitions',
-		'competitionsDispatch'
+		'competitionsAction'
 	);
 
 	const searchHandler = useCallback(

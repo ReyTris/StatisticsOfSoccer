@@ -1,64 +1,55 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../hooks/useDispatch';
+import { useGetCalendarData } from '../hooks/useGetCalendarData';
 import { useGetMatchesData } from '../hooks/useGetData';
 import { ICompetitionMatch } from '../models/response/ICompetitionsMatches';
-import {
-	IInitialState,
-	teamMatchesDate,
-} from '../store/slices/competitionsSlice';
 
 interface HocProps {
 	selectorName: string;
 	actionName: string;
+	actionNameByDate: string;
 }
 
 // HOC function
 const withMatchesData = (WrappedComponent) => {
-	return ({ selectorName, actionName }: HocProps) => {
+	return ({ selectorName, actionName, actionNameByDate }: HocProps) => {
 		const location = useLocation();
 		const pathnames = location.pathname.split('/');
 		const matchId = Number(pathnames.at(-1));
 
-		const [updateData, setUpdateData] = useState<ICompetitionMatch[]>([]);
-		const dispatch = useAppDispatch();
+		const [pickDate, setPickDate] = useState<string[]>([]);
 
-		const state: IInitialState = useAppSelector(
-			(state) => state.competitionsReducer
-		);
+		const [updateData, setUpdateData] = useState<ICompetitionMatch[]>([]);
+
+		//Получение общего списка матчей лиги или команды
 		const { dataList, isLoading } = useGetMatchesData(
 			selectorName,
 			actionName,
 			matchId
 		);
 
-		const [pickDate, setPickDate] = useState<string[]>([]);
+		//Получение списка матчей по календарю
+		const { matchDataByDate } = useGetCalendarData(
+			pickDate,
+			matchId,
+			actionNameByDate
+		);
 
-		const startDateHandler = (dateString) => {
+		const startDateHandler = (dateString: string[]) => {
 			setPickDate(dateString);
 		};
 
 		useEffect(() => {
-			setUpdateData(dataList);
-		}, [dataList]);
-
-		useEffect(() => {
-			if (pickDate.length) {
-				dispatch(
-					teamMatchesDate({
-						id: matchId,
-						dateFrom: pickDate[0],
-						dateTo: pickDate[1],
-					})
-				);
-				setUpdateData(state.data.matches);
+			if (matchDataByDate.length > 0) {
+				setUpdateData(matchDataByDate);
+			} else {
+				setUpdateData(dataList);
 			}
-		}, [dispatch, matchId, pickDate, state.data.teamMatchesDate]);
-
+		}, [dataList, matchDataByDate]);
 		return (
 			<WrappedComponent
 				dataList={updateData}
-				isLoading={isLoading}
+				isLoading={isLoading || !updateData.length}
 				startDateHandler={startDateHandler}
 			/>
 		);
