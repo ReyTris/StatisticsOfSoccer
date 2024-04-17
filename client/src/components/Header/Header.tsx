@@ -3,7 +3,7 @@ import { NavBar } from '../NavBar/NavBar';
 
 const Header: FC = () => {
 	return (
-		<div className="m-0 m-auto py-10 max-w-screen-2xl">
+		<div className="m-0 m-auto max-w-screen-2xl">
 			<NavBar />
 		</div>
 	);

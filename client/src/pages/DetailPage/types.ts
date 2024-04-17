@@ -1,3 +1,10 @@
+export interface DetailPageProps {
+	dataList: any;
+	isLoading: boolean;
+	dateHandler: (dateString: string[]) => void;
+	nameTeam: string;
+}
+
 export interface ITableData {
 	key: number;
 	date: string;

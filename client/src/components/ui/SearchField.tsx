@@ -16,7 +16,7 @@ const SearchField: FC<SearchFieldProps> = memo(
 		}, []);
 
 		return (
-			<div className="flex items-center h-[40px] max-w-[200px] px-5 rounded-default border-2">
+			<div className="flex items-center mt-5 h-[40px] max-w-[200px] px-5 rounded-default border-2">
 				<FaSearch className="mr-2" />
 				<input
 					ref={inputRef}

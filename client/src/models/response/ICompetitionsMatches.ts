@@ -26,7 +26,7 @@ interface Referee {
 	nationality: string;
 }
 
-export interface ICompetitionMatch {
+export interface IMatch {
 	area: {
 		id: number;
 		name: string;

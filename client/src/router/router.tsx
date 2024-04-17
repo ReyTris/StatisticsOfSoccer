@@ -25,6 +25,7 @@ export const router = createBrowserRouter([
 						selectorName="matches"
 						actionName="competitionMatchesAction"
 						actionNameByDate="competitionMatchesByDateAction"
+						isNameCompetition={true}
 					/>
 				),
 			},

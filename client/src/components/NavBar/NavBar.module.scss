@@ -1,5 +1,5 @@
 .navLink {
-	@apply px-10 py-5 rounded-default hover:bg-blue-200 hover:text-white transition-all border-2 border-blue-200;
+	@apply px-10 py-5 rounded-default hover:bg-blue-200 hover:text-white transition-all border-2 first-of-type:mr-3 border-blue-200;
 }
 
 .navActiveLink {

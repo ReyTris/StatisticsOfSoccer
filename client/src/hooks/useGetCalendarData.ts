@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import { ICompetitionMatch } from '../models/response/ICompetitionsMatches';
+import { IMatch } from '../models/response/ICompetitionsMatches';
+import { actionCreators } from '../store/slices/actionCreators';
 import { IInitialState } from '../store/slices/competitionsSlice';
+import { IActionCreatorsByDate } from '../store/slices/types';
 import { useAppDispatch, useAppSelector } from './useDispatch';
-import { IActionCreatorsByDate, actionCreators } from './useGetData';
 
 export const useGetCalendarData = (
 	pickDate: string[],
 	matchId: number,
 	actionNameByDate: string
 ) => {
-	const [matchDataByDate, setMatchDataByDate] = useState<ICompetitionMatch[]>(
-		[]
-	);
+	const [matchDataByDate, setMatchDataByDate] = useState<IMatch[]>([]);
 	const dispatch = useAppDispatch();
 	const state: IInitialState = useAppSelector(
 		(state) => state.competitionsReducer
@@ -29,7 +28,7 @@ export const useGetCalendarData = (
 				})
 			);
 		}
-	}, [dispatch, pickDate]);
+	}, [actionNameByDate, dispatch, matchId, pickDate]);
 
 	useEffect(() => {
 		setMatchDataByDate(matches);

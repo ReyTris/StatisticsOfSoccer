@@ -2,29 +2,36 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useGetCalendarData } from '../hooks/useGetCalendarData';
 import { useGetMatchesData } from '../hooks/useGetData';
-import { ICompetitionMatch } from '../models/response/ICompetitionsMatches';
+import { IMatch } from '../models/response/ICompetitionsMatches';
 
 interface HocProps {
 	selectorName: string;
 	actionName: string;
 	actionNameByDate: string;
+	isNameCompetition?: boolean;
 }
 
 // HOC function
-const withMatchesData = (WrappedComponent) => {
-	return ({ selectorName, actionName, actionNameByDate }: HocProps) => {
+const withMatchesData = (WrappedComponent: any) => {
+	return ({
+		selectorName,
+		actionName,
+		actionNameByDate,
+		isNameCompetition,
+	}: HocProps) => {
 		const location = useLocation();
 		const pathnames = location.pathname.split('/');
 		const matchId = Number(pathnames.at(-1));
 
 		const [pickDate, setPickDate] = useState<string[]>([]);
 
-		const [updateData, setUpdateData] = useState<ICompetitionMatch[]>([]);
+		const [updateData, setUpdateData] = useState<IMatch[]>([]);
 
 		//Получение общего списка матчей лиги или команды
-		const { dataList, isLoading } = useGetMatchesData(
+		const { dataList, isLoading, nameTeam } = useGetMatchesData(
 			selectorName,
 			actionName,
+			isNameCompetition,
 			matchId
 		);
 
@@ -35,7 +42,7 @@ const withMatchesData = (WrappedComponent) => {
 			actionNameByDate
 		);
 
-		const startDateHandler = (dateString: string[]) => {
+		const dateHandler = (dateString: string[]) => {
 			setPickDate(dateString);
 		};
 
@@ -50,7 +57,8 @@ const withMatchesData = (WrappedComponent) => {
 			<WrappedComponent
 				dataList={updateData}
 				isLoading={isLoading || !updateData.length}
-				startDateHandler={startDateHandler}
+				dateHandler={dateHandler}
+				nameTeam={nameTeam}
 			/>
 		);
 	};

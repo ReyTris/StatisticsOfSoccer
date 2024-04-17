@@ -1,50 +1,19 @@
 import { useEffect, useState } from 'react';
+import { actionCreators } from '../store/slices/actionCreators';
 import {
 	IInitialState,
 	IInitialStateData,
-	allCompetitions,
-	allTeams,
-	competitionMatches,
-	competitionMatchesDate,
-	teamMatches,
-	teamMatchesDate,
 } from '../store/slices/competitionsSlice';
+import { IActionCreators, IActionCreatorsById } from '../store/slices/types';
 import { useAppDispatch, useAppSelector } from './useDispatch';
-
-export interface IParamsDate {
-	id: number;
-	dateFrom: string;
-	dateTo: string;
-}
-
-export interface IActionCreators {
-	competitionsAction: () => void;
-	teamsAction: () => void;
-}
-export interface IActionCreatorsById {
-	competitionMatchesAction: (id: number) => void;
-	teamMatchesAction: (id: number) => void;
-}
-export interface IActionCreatorsByDate {
-	teamMatchesByDateAction: (data: IParamsDate) => void;
-	competitionMatchesByDateAction: (data: IParamsDate) => void;
-}
-
-export const actionCreators = {
-	competitionsAction: allCompetitions,
-	competitionMatchesAction: competitionMatches,
-	teamsAction: allTeams,
-	teamMatchesAction: teamMatches,
-	teamMatchesByDateAction: teamMatchesDate,
-	competitionMatchesByDateAction: competitionMatchesDate,
-};
 
 export const useGetMatchesData = (
 	nameSelector: string,
 	nameAction: string,
+	isNameCompetition?: boolean,
 	matchId?: number
 ) => {
-	const [dataList, setDataList] = useState([]);
+	const [dataList, setDataList] = useState<any>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const dispatch = useAppDispatch();
 
@@ -53,6 +22,7 @@ export const useGetMatchesData = (
 	);
 	const matchesList = state.data[nameSelector as keyof IInitialStateData];
 	const loadingStatus = state.loading;
+	const nameTeam = isNameCompetition && state.data.nameTeam;
 
 	useEffect(() => {
 		if (matchId) {
@@ -74,5 +44,5 @@ export const useGetMatchesData = (
 		}
 	}, [loadingStatus, matchesList]);
 
-	return { dataList, isLoading };
+	return { dataList, isLoading, nameTeam };
 };

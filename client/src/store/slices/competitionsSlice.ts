@@ -2,11 +2,11 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { IParamsDate } from '../../hooks/useGetData';
-import { ICompetitionMatch } from '../../models/response/ICompetitionsMatches';
+import { IMatch } from '../../models/response/ICompetitionsMatches';
 import { ICompetition } from '../../models/response/ICompetitionsResponse';
 import { ITeamResponse } from '../../models/response/ITeamResponse';
 import { CompetitionsService } from '../../services/competitions/competitions.service';
+import { IParamsDate } from './types';
 
 export interface IInitialState {
 	loading: boolean;
@@ -15,7 +15,7 @@ export interface IInitialState {
 
 export interface IInitialStateData {
 	competitions: ICompetition[];
-	matches: ICompetitionMatch[];
+	matches: IMatch[];
 	teams: ITeamResponse[];
 	nameTeam: string;
 }
