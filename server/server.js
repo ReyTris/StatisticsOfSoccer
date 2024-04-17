@@ -1,5 +1,6 @@
 import axios from 'axios';
 import cors from 'cors';
+import 'dotenv/config';
 import express from 'express';
 
 const app = express();
@@ -14,10 +15,10 @@ app.use(
 
 export const $api = axios.create({
 	withCredentials: true,
-	baseURL: 'https://api.football-data.org/v4',
+	baseURL: process.env.API_URL,
 	headers: {
 		'Content-Type': 'application/json',
-		'X-Auth-Token': '359669d2034d4b95bf5d81c61262e5f4',
+		'X-Auth-Token': process.env.TOKEN,
 	},
 });
 
