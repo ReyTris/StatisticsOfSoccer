@@ -43,17 +43,17 @@ const withMatchesData = (WrappedComponent) => {
 		}, [dataList]);
 
 		useEffect(() => {
-			dispatch(
-				teamMatchesDate({
-					id: matchId,
-					dateFrom: pickDate[0],
-					dateTo: pickDate[1],
-				})
-			);
-			setUpdateData(state.data.teamMatchesDate);
-			console.log(pickDate);
-			console.log(state.data);
-		}, [pickDate]);
+			if (pickDate.length) {
+				dispatch(
+					teamMatchesDate({
+						id: matchId,
+						dateFrom: pickDate[0],
+						dateTo: pickDate[1],
+					})
+				);
+				setUpdateData(state.data.matches);
+			}
+		}, [dispatch, matchId, pickDate, state.data.teamMatchesDate]);
 
 		return (
 			<WrappedComponent

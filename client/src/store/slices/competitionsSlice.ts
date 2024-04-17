@@ -134,14 +134,14 @@ export const competitionsSlice = createSlice({
 		});
 		builder.addCase(teamMatches.fulfilled, (state, action) => {
 			state.loading = false;
-			state.data.teamMatches = action.payload.data.matches;
+			state.data.matches = action.payload.data.matches;
 		});
 		builder.addCase(teamMatchesDate.pending, (state) => {
 			state.loading = true;
 		});
 		builder.addCase(teamMatchesDate.fulfilled, (state, action) => {
 			state.loading = false;
-			state.data.teamMatchesDate = action.payload.data.matches;
+			state.data.matches = action.payload.data.matches;
 		});
 	},
 });

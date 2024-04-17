@@ -51,7 +51,7 @@ export const useGetMatchesData = (
 	}, [matchesList]);
 
 	useEffect(() => {
-		if (!loadingStatus && matchesList.length > 0) {
+		if (loadingStatus === false && matchesList.length > 0) {
 			setIsLoading(false);
 		}
 	}, [loadingStatus, matchesList]);

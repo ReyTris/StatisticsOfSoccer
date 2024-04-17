@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
 				path: 'teams/:id',
 				element: (
 					<InitMatchesPage
-						selectorName="teamMatches"
+						selectorName="matches"
 						actionName="teamMatchesDispatch"
 					/>
 				),
